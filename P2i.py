@@ -18,9 +18,12 @@ def creer_piece():
     return tableaux
 
 def afficher_plateau(plateau, piece=[]):
+    print ("## Plateau: ##")
     for n in range (4):
         print(plateau[n][0],plateau[n][1],plateau[n][2],plateau[n][3])
     n=0
+    print (" ")
+    print ("## Pieces: ##")
     if not (plateau==[]):
         while(n<(int(len(piece)))):
             a=0
@@ -33,11 +36,11 @@ def afficher_plateau(plateau, piece=[]):
 
 
 Pieces=creer_piece()
-print (len(Pieces))
-print(Pieces[15])
-print(Pieces[0])
+#print (len(Pieces))
+#print(Pieces[15])
+#print(Pieces[0])
 plateau=init_plateau()
-afficher_plateau(plateau, Pieces)
+#afficher_plateau(plateau, Pieces)
 
 ##Initialiser plateau
 Pieces=creer_piece()
@@ -65,13 +68,13 @@ def placer_pions(plateau, pion,coordonnees,Pieces):
 
 placer_pions(plateau,[1,1,2,1], [1,4],Pieces)
 
-afficher_plateau(plateau, Pieces)
+#afficher_plateau(plateau, Pieces)
 
 ##Verification de victoire
 
 
 
-def victoire (plateau):    #pas de vertical pour l'instant
+def victoire (plateau):    #pas de diagonal pour l'instant
     for i in range (4):
         count1=0
         count2=0
@@ -88,7 +91,7 @@ def victoire (plateau):    #pas de vertical pour l'instant
             print ("4 pieces alignér à l'horizontal")
     return
 
-def victoiretour (plateau, coordonnee,pion):   #pas de vertical pour l'instant
+def victoiretour (plateau, coordonnee,pion):
     test1=0
     test2=0
     test3=0
@@ -168,7 +171,7 @@ def victoiretour (plateau, coordonnee,pion):   #pas de vertical pour l'instant
         print ("Victoire !!")
         return True
     else :
-        print ("Continuez à jouer")
+        #print ("Continuez à jouer")
         return False
 
     return
@@ -191,7 +194,7 @@ def Choix_Pion(Pieces):
             print("Veuillez entrer un numéro valide.")
 
 
-##Fonction Systeme Expert
+##Fonction Systeme Expert V1
 def Choix_Pion_SE(pieces,plateau):
     pion=random.choice(pieces)
     return pion
@@ -205,17 +208,200 @@ def Placer_Pion_SE(plateau,pion):
         ligne, colonne = coordonnees
         return [ligne+1, colonne+1]
     else:
+        #print("Aucune case vide disponible.")
+        return None
+
+##Fonction Systeme Expert V2
+def alignement3 (plateau):
+    afficher_plateau(plateau)
+    vert1,vert2,vert3,hor1,hor2,hor3,diag1,diag2=0,0,0,0,0,0,0,0
+    aligement=[0,0,0,0,0,0,0,0,0,0]
+    alignementàcompleter=[]
+    for k in range (4):
+        if (plateau[0][k]!=[0,0,0,0] and aligement[0]>=k-1):
+            aligement[0]+=1
+        if (plateau[1][k]!=[0,0,0,0] and aligement[1]>=k-1):
+            aligement[1]+=1
+        if (plateau[2][k]!=[0,0,0,0] and aligement[2]>=k-1):
+            aligement[2]+=1
+        if (plateau[3][k]!=[0,0,0,0] and aligement[3]>=k-1):
+            aligement[3]+=1
+        if (plateau[k][0]!=[0,0,0,0] and aligement[4]>=k-1):
+            aligement[4]+=1
+        if (plateau[k][1]!=[0,0,0,0] and aligement[5]>=k-1):
+            aligement[5]+=1
+        if (plateau[k][2]!=[0,0,0,0] and aligement[6]>=k-1):
+            aligement[6]+=1
+        if (plateau[k][3]!=[0,0,0,0] and aligement[7]>=k-1):
+            aligement[7]+=1
+        if (plateau[k][k]!=[0,0,0,0] and aligement[8]>=k-1):
+            aligement[8]+=1
+        if (plateau[k][3-k]!=[0,0,0,0] and aligement[9]>=k-1):
+            aligement[9]+=1
+    #print (aligement)
+    compte=1
+    serie=[]
+    for j in range (4):
+        if (aligement[j]==3):
+            for i in range (4):
+                a = plateau [0][j][i]
+                compte=1
+                if (a==0):
+                    a = plateau [1][j][i]
+                    if ()
+
+                for k in (1,2,3):
+                    if (plateau [j][k][i]==a):
+                        compte+=1
+                if (compte==3):
+                    tour=[i,a]
+                    serie.append(tour)
+            if (serie!=[]):
+                serie.append(j)
+                alignementàcompleter.append(serie)
+        compte=1
+        serie=[]
+
+    for j in range (4):
+        if (aligement[j+4]==3):
+            for i in range (4):
+                a = plateau [0][j][i]
+                compte=1
+                if (a==0):
+                    a = plateau [1][j][i]
+                    compte=0
+                #print (f"a={a} compte={compte}")
+                for k in (1,2,3):
+                    #print(f"plateau[{k}][{j}][{i}]={plateau [k][j][i]}")
+                    if (plateau [k][j][i]==a):
+                        #print ("oui")
+                        compte+=1
+                        #print (f"compte={compte}")
+                #print (f"i={i} compte={compte}")
+                if (compte==3):
+                    tour=[i,a]
+                    serie.append(tour)
+            if (serie!=[]):
+                serie.append(j+4)
+                alignementàcompleter.append(serie)
+        compte=1
+        serie=[]
+
+    if (aligement[8]==3):
+        for i in range (4):
+            a = plateau [0][0][i]
+            compte=1
+            if (a==0):
+                a = plateau [1][1][i]
+                compte=0
+            for k in (1,2,3):
+                #print(f"plateau[{k}][{k}][{i}]={plateau [k][k][i]}")
+                if (plateau [k][k][i]==a):
+                    compte+=1
+            if (compte==3):
+                tour=[i,a]
+                serie.append(tour)
+        if (serie!=[]):
+            serie.append(8)
+            alignementàcompleter.append(serie)
+    compte=1
+    serie=[]
+    #print (aligement)
+    if (aligement[9]==3):
+        for i in range (4):
+            a = plateau [0][3][i]
+            compte=1
+            if (a==0):
+                a = plateau [1][2][i]
+                compte=0
+            for k in (1,2,3):
+                if (plateau [k][3-k][i]==a):
+                    compte+=1
+            if (compte>=3):
+                tour=[i,a]
+                serie.append(tour)
+        if (serie!=[]):
+            serie.append(9)
+            alignementàcompleter.append(serie)
+    compte=1
+    serie=[]
+    return (alignementàcompleter)
+
+
+
+
+#def Choix_Pion_SE(pieces,plateau):
+
+ #   for piece in pieces:
+
+
+
+
+  #  pion=random.choice(pieces)
+   # return pion
+
+def Placer_Pion_SE(plateau,pion):
+    cases_vides = [(i, j) for i, ligne in enumerate(plateau) for j, colonne in enumerate(ligne) if colonne == [0, 0, 0, 0]]
+    if cases_vides:
+        for case in cases_vides:
+            print (case)
+            l,c = case
+            print (l,c)
+            plateau[l][c] = pion
+            afficher_plateau(plateau,Pieces11)
+            print("case: ")
+            print(case)
+            if (victoiretour(plateau, case, pion)):
+                print ("reconnais victoire")
+                ligne, colonne = case
+                return [ligne, colonne]
+            else:
+                plateau[l][c] = [0,0,0,0]
+        coordonnees = random.choice(cases_vides)
+        ligne, colonne = coordonnees
+        return [ligne+1, colonne+1]
+    else:
         print("Aucune case vide disponible.")
         return None
 
+##Fonction Systeme Expert V3
+def Choix_Pion_SE(pieces,plateau):
+    pion=random.choice(pieces)
+    return pion
+
+def Placer_Pion_SE(plateau,pion):
+    cases_vides = [(i, j) for i, ligne in enumerate(plateau) for j, colonne in enumerate(ligne) if colonne == [0, 0, 0, 0]]
+    if cases_vides:
+        for case in cases_vides:
+            print (case)
+            l,c = case
+            print (l,c)
+            plateau[l][c] = pion
+            afficher_plateau(plateau,Pieces11)
+            print("case: ")
+            print(case)
+            if (victoiretour(plateau, case, pion)):
+                print ("reconnais victoire")
+                ligne, colonne = case
+                return [ligne, colonne]
+            else:
+                plateau[l][c] = [0,0,0,0]
+        coordonnees = random.choice(cases_vides)
+        ligne, colonne = coordonnees
+        return [ligne+1, colonne+1]
+    else:
+        print("Aucune case vide disponible.")
+        return None
+
+
 ##Jeu en 1V1
-def jeu_quarto():
-    plateau = init_plateau()
-    pieces = creer_piece()
+def jeu_quarto(plateau,pieces):
+    #plateau = init_plateau()
+    #pieces = creer_piece()
     Fin=0
 
     joueur_actuel = 1
-    print("\nJoueur {joueur_actuel}, selectionnez une piece à donner a votre adversaire :")
+    print(f"\nJoueur {joueur_actuel}, selectionnez une piece à donner a votre adversaire :")
     piece_selectionnee = Choix_Pion(pieces)
     joueur_actuel = 2
 
@@ -226,7 +412,7 @@ def jeu_quarto():
         coord_y = int(input("Entrez la colonne (1-4) où vous voulez placer la pièce : "))
 
         placer_pions(plateau, piece_selectionnee, [coord_x, coord_y],pieces)
-
+        print ([coord_x-1, coord_y-1], piece_selectionnee)
         if victoiretour(plateau, [coord_x-1, coord_y-1], piece_selectionnee):
             afficher_plateau(plateau)
             print(f"\nLe Joueur {joueur_actuel} a gagné !")
@@ -235,6 +421,14 @@ def jeu_quarto():
             print(f"\nJoueur {joueur_actuel}, selectionnez une piece à donner a votre adversaire : {piece_selectionnee}")
             piece_selectionnee = Choix_Pion(pieces)
         joueur_actuel = 3 - joueur_actuel
+##Tests while
+
+def test():
+    fin=0
+    while (fin==0):
+        x = int(input("entrez 1 pour finir le programme "))
+        if (x==1):
+            fin=1
 
 ##Jeu SE
 
@@ -250,7 +444,7 @@ def jeu_quarto_SE(plateau,pieces,joueur_actuel):
         joueur_actuel = 0
 
     while (Fin==0):
-        afficher_plateau(plateau,pieces)
+        #afficher_plateau(plateau,pieces)
         if (joueur_actuel==0):
             coordonnees=Placer_Pion_SE(plateau, piece_selectionnee)
             placer_pions(plateau, piece_selectionnee, coordonnees,pieces)
@@ -281,7 +475,7 @@ def jeu_quarto_SE(plateau,pieces,joueur_actuel):
                 piece_selectionnee = Choix_Pion(pieces)
                 joueur_actuel = 0
         afficher_plateau(plateau,pieces)
-
+    return
 
 ##Essai chat
 
@@ -309,19 +503,35 @@ mon_plateau = [
 pion_a_placer = [2, 1, 2, 2]
 
 # Appel de la fonction avec le plateau et le pion
-coordonnees_assignees = Placer_Pion_SE(mon_plateau, pion_a_placer)
-print(f"Pion placé sur le plateau aux coordonnées : {coordonnees_assignees}")
+#coordonnees_assignees = Placer_Pion_SE(mon_plateau, pion_a_placer)
+#print(f"Pion placé sur le plateau aux coordonnées : {coordonnees_assignees}")
 
 ##Création environnement
+
+[[1, 1, 1, 1], [1, 1, 1, 2], [1, 1, 2, 1], [1, 1, 2, 2], [1, 2, 1, 1], [1, 2, 1, 2], [1, 2, 2, 1], [1, 2, 2, 2], [2, 1, 1, 1], [2, 1, 1, 2], [2, 1, 2, 1], [2, 1, 2, 2], [2, 2, 1, 1], [2, 2, 1, 2], [2, 2, 2, 1], [2, 2, 2, 2]]
+
+##Plein de victoires possible (à verifier cbn
+
+Environnement01=[[1, 1, 1, 1], [1, 2, 1, 2], [1, 1, 2, 1], [0, 0, 0, 0]],[[2, 2, 1, 1], [1, 1, 1, 2], [2, 2, 1, 2], [0, 0, 0, 0]],[[2, 1, 1, 1], [1, 1, 2, 2], [2, 1, 2, 2], [0, 0, 0, 0]],[[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+
+Pieces01=[[1, 2, 1, 1], [1, 2, 2, 1], [1, 2, 2, 2],  [2, 1, 1, 2], [2, 1, 2, 1], [2, 2, 2, 1], [2, 2, 2, 2]]
+
 ##Victoire ou non défaite en un coup
 #[1,2,1,2] et [2,1,1,1], par exemple, donnent la victoire en [3,1]
 Environnement11 = [[[1, 1, 2, 2], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]], [[1, 1, 2, 1], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]], [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]], [[1, 1, 1, 1], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]]
+Pieces11 = [[1, 1, 1, 2], [1, 2, 1, 1], [1, 2, 1, 2], [1, 2, 2, 1], [1, 2, 2, 2], [2, 1, 1, 1], [2, 1, 1, 2], [2, 1, 2, 1], [2, 1, 2, 2], [2, 2, 1, 1], [2, 2, 1, 2], [2, 2, 2, 1], [2, 2, 2, 2]]
+
 
 #[1,2,1,2] et [2,1,1,1], par exemple, donnent la victoire en [1,4]
 Environnement12 = [[[1, 1, 2, 2], [1, 1, 1, 2], [1, 1, 1, 1], [0, 0, 0, 0]], [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]], [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]], [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]]
 
 #[2,1,1,1] et [1,2,2,2] par exemple, donnent la victoire en [3,3]
 Environnement13 = [[[1, 1, 2, 2], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]], [[0, 0, 0, 0], [1, 1, 1, 1], [0, 0, 0, 0], [0, 0, 0, 0]], [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]], [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [1, 1, 2, 1]]]
+
+Environnement14 = [[[0, 0, 0, 0], [1, 1, 2, 2], [0, 0, 0, 0], [0, 0, 0, 0]], [[0, 0, 0, 0], [1, 1, 2, 1], [0, 0, 0, 0], [0, 0, 0, 0]], [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]], [[0, 0, 0, 0], [1, 1, 1, 1], [0, 0, 0, 0], [0, 0, 0, 0]]]
+
+Environnement15 = [[[0, 0, 0, 0], [0, 0, 0, 0], [2, 1, 2, 2], [0, 0, 0, 0]], [[0, 0, 0, 0], [0, 0, 0, 0], [2, 1, 2, 1], [0, 0, 0, 0]], [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]], [[0, 0, 0, 0], [0, 0, 0, 0], [2, 1, 1, 1], [0, 0, 0, 0]]]
+
 
 #[1,2,1,2] et [2,1,1,1], par exemple, donnent la victoire en [3,1]
 Environnement21 = [[[1, 1, 2, 2], [0, 0, 0, 0], [0, 0, 0, 0], [1, 2, 2, 2]], [[1, 1, 2, 1], [0, 0, 0, 0], [2, 2, 1, 1], [0, 0, 0, 0]], [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]], [[1, 1, 1, 1], [0, 0, 0, 0], [1, 1, 1, 2], [1, 2, 1, 1]]]
@@ -350,7 +560,7 @@ Pieces32= [[1,1,1,1],[1,1,1,2],[1,2,2,2],[2,2,2,2],[2,2,2,1],[2,2,1,2],[2,2,1,1]
 
 #Scénario: On donne la pieces [2,2,1,2] à jouer au SE, il doit le placer en [1,2]/[1,3]/[4,2]/[4,3] et donner la piece [2,2,1,1]. Victoir à son prochain tour.
 
-##Victoire
+##Victoire en 3 coups
 Environnement41 =[[[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [1, 2, 1, 1]],
                  [[0, 0, 0, 0], [0, 0, 0, 0], [2, 2, 2, 1], [1, 2, 1, 2]],
                  [[1, 1, 2, 1], [2, 2, 2, 2], [2, 1, 2, 2], [2, 1, 1, 1]],
