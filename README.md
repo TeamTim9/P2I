@@ -4,7 +4,7 @@ Ce dépôt GitHub contient un seul fichier Python qui constitue l'entièreté du
 
 ## Aperçu du Projet
 
-- `PII.py` : Ce fichier Python contient le code source complet du jeu "Quartop".
+- `P2i.py` : Ce fichier Python contient le code source complet du jeu "Quartop".
 
 ## Objectif du Dépôt
 
